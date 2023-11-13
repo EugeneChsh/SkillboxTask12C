@@ -9,8 +9,8 @@
     <Grid>
         <Label Content="Счет для снятия:" HorizontalAlignment="Left" Height="30"
                Margin="35,35,0,0" VerticalAlignment="Top" Width="180" FontSize="16"/>
-        <ComboBox HorizontalAlignment="Left" Height="30" Margin="330,35,0,0" VerticalAlignment="Top" Width="370" 
-                  ItemsSource="{Binding LoadedAccountList}"
+        <ComboBox HorizontalAlignment="Left" Height="30" Margin="250,35,0,0" VerticalAlignment="Top" Width="450" 
+                  ItemsSource="{Binding FirstAccountList}"
                   SelectionChanged="ComboBox_AccountForMinusChanged" x:Name="ComboBoxAccountForMinus">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -21,7 +21,7 @@
 
         <Label Content="Счет для пополнения:" HorizontalAlignment="Left" Height="30"
                Margin="35,125,0,0" VerticalAlignment="Top" Width="180" FontSize="16"/>
-        <ComboBox HorizontalAlignment="Left" Height="30" Margin="330,125,0,0" VerticalAlignment="Top" Width="370"
+        <ComboBox HorizontalAlignment="Left" Height="30" Margin="250,125,0,0" VerticalAlignment="Top" Width="450"
                   ItemsSource="{Binding SecondAccountList}"
                   SelectionChanged="ComboBox_AccountForTransactionChanged" x:Name="ComboBoxAccountForTransaction">
             <ComboBox.ItemTemplate>
@@ -33,8 +33,8 @@
 
         <Label Content="Сумма перевода:" HorizontalAlignment="Left" Height="30"
                Margin="35,215,0,0" VerticalAlignment="Top" Width="180" FontSize="16"/>
-        <TextBox HorizontalAlignment="Left" Height="30" Margin="330,215,0,0" TextWrapping="Wrap" Text="" 
-                 VerticalAlignment="Top" Width="370" x:Name="TextBoxTransactionSumm" FontSize="16"/>
+        <TextBox HorizontalAlignment="Left" Height="30" Margin="250,215,0,0" TextWrapping="Wrap" Text="" 
+                 VerticalAlignment="Top" Width="450" x:Name="TextBoxTransactionSumm" FontSize="16"/>
         
         <Button Content="Перевести" HorizontalAlignment="Left" Height="30" Margin="230,360,0,0" VerticalAlignment="Top" 
                 Width="285" FontSize="16" Click="Button_DoTransaction" />

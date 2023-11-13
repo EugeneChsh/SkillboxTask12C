@@ -46,13 +46,6 @@ namespace Lesson12Task
 
             Client newClient = clientFormWindow.Client;
 
-            AddAccountWindow accountFormWindow = new AddAccountWindow(newClient);
-            accountFormWindow.ShowDialog();
-
-            AccountNonDeposit newAccount = accountFormWindow.Account;
-
-            newClient.AccountList.Add(newAccount);
-
             this.clientList.Add(newClient);
 
             LoadClientsIntoFile();

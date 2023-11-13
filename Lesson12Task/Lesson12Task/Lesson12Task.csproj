@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Account.cs" />
     <Compile Include="AccountFormWindow.xaml.cs">
       <DependentUpon>AccountFormWindow.xaml</DependentUpon>
     </Compile>
@@ -68,7 +69,9 @@
     <Compile Include="AddClientWindow.xaml.cs">
       <DependentUpon>AddClientWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DepositAccount.cs" />
     <Compile Include="IAccount.cs" />
+    <Compile Include="NonDepositAccount.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="TransactionWindow.xaml.cs">
       <DependentUpon>TransactionWindow.xaml</DependentUpon>
@@ -89,7 +92,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AccountNonDeposit.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

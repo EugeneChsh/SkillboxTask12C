@@ -20,7 +20,9 @@ namespace Lesson12Task
     public partial class AddAccountWindow : Window
     {
         private Client client;
-        public AccountNonDeposit Account { get; set; }
+        public Account<decimal, decimal> Account { get; set; }
+        private Boolean isDepositAccount = false;
+
         public AddAccountWindow()
         {
             InitializeComponent();
@@ -33,17 +35,42 @@ namespace Lesson12Task
             LabelOwnerFIO.Content = ($"ФИО Владельца: {this.client.FIO}");
         }
 
+        // очень длинный метод, аж самому не по себе, правда
         private void Button_Save(object sender, RoutedEventArgs e)
         {
-            if (double.TryParse(TextBoxAmount.Text, out double amount))
+            if (decimal.TryParse(TextBoxAmount.Text, out decimal balance))
             {
-                if (amount < 0)
+                if (balance < 0)
                 {
                     MessageBox.Show("Сумма на счете не может быть отрицательной!");
                 } 
                 else
                 {
-                    this.Account = new AccountNonDeposit(amount, this.client.Id);
+                    if (isDepositAccount)
+                    {
+                        if (this.client.DepositAccount == null)
+                        {
+                            this.Account = new DepositAccount<decimal, decimal>(balance, this.client.Id, "депозитный", true);
+                            this.client.DepositAccount = (DepositAccount<decimal, decimal>)this.Account;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Депозитный счет уже создан");
+                        }
+                    } 
+                    else
+                    {
+                        if (this.client.NonDepositAccount == null)
+                        {
+                            this.Account = new NonDepositAccount<decimal, decimal>(balance, this.client.Id, "недепозитный", false);
+                            this.client.NonDepositAccount = (NonDepositAccount<decimal, decimal>)this.Account;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Недепозитный счет уже создан");
+                        }
+                    }
+                    
                     Close();
                 }
             }
@@ -51,6 +78,16 @@ namespace Lesson12Task
             {
                 MessageBox.Show("Введите корректную сумму в поле \"Начальная Сумма\"");
             }
+        }
+
+        private void RadioButtonNonDeposit_Click(object sender, RoutedEventArgs e)
+        {
+            isDepositAccount = false;
+        }
+
+        private void RadioButtonDeposit_Click(object sender, RoutedEventArgs e)
+        {
+            isDepositAccount = true;
         }
     }
 }

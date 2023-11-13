@@ -21,17 +21,19 @@ namespace Lesson12Task
     /// </summary>
     public partial class TransactionWindow : Window
     {
-        public ObservableCollection<AccountNonDeposit> LoadedAccountList { get; set; }
-        public ObservableCollection<AccountNonDeposit> SecondAccountList { get; set; }
+        private Client LoadedClient;
+        public ObservableCollection<Account<decimal, decimal>> FirstAccountList { get; set; }
+        public ObservableCollection<Account<decimal, decimal>> SecondAccountList { get; set; }
 
-        private AccountNonDeposit selectedAccountForMinus;
-        private AccountNonDeposit selectedAccountForTransaction;
+        private Account<decimal, decimal> selectedAccountForMinus;
+        private Account<decimal, decimal> selectedAccountForPlus;
 
-        public TransactionWindow(ObservableCollection<AccountNonDeposit> _accountList)
+        public TransactionWindow(Client _LoadedClient)
         {
             InitializeComponent();
-            this.LoadedAccountList = _accountList;
-            SecondAccountList = new ObservableCollection<AccountNonDeposit>();
+            this.SecondAccountList = new ObservableCollection<Account<decimal, decimal>>();
+            this.LoadedClient = _LoadedClient;
+            FillAccountList();
             DataContext = this;
         }
 
@@ -39,7 +41,7 @@ namespace Lesson12Task
         {
             if (ComboBoxAccountForMinus.SelectedItem != null)
             {
-                this.selectedAccountForMinus = (AccountNonDeposit)ComboBoxAccountForMinus.SelectedItem;
+                this.selectedAccountForMinus = (Account<decimal, decimal>)ComboBoxAccountForMinus.SelectedItem;
                 FillSecondAccountListForTransaction();
             }
         }
@@ -48,7 +50,7 @@ namespace Lesson12Task
         {
             if (ComboBoxAccountForTransaction.SelectedItem != null)
             {
-                this.selectedAccountForTransaction = (AccountNonDeposit)ComboBoxAccountForTransaction.SelectedItem;
+                this.selectedAccountForPlus = (Account<decimal, decimal>)ComboBoxAccountForTransaction.SelectedItem;
 
             }
         }
@@ -56,29 +58,32 @@ namespace Lesson12Task
         private void Button_DoTransaction(object sender, RoutedEventArgs e)
         {
             string vaueForTransaction = TextBoxTransactionSumm.Text;
-            if (double.TryParse(vaueForTransaction, out double transactionSum))
+            if (decimal.TryParse(vaueForTransaction, out decimal transactionSum))
             {
-                if (this.selectedAccountForMinus.Ammount - transactionSum < 0)
+                if (this.selectedAccountForMinus.Balance - transactionSum < 0)
                 {
                     MessageBox.Show("Недостаточно средств на счете!");
-                } 
+                }
                 else
                 {
-                    for (int i = 0; i < this.LoadedAccountList.Count; i++)
-                    {
-                        if (this.LoadedAccountList[i].AccountNumber == this.selectedAccountForMinus.AccountNumber)
-                        {
-                            this.LoadedAccountList[i].Ammount = this.LoadedAccountList[i].Ammount - transactionSum;
-                            Console.WriteLine("this.selectedKeyForMinus: " + this.LoadedAccountList[i].Ammount);
-                            continue;
-                        }
-                        if (this.LoadedAccountList[i].AccountNumber == this.selectedAccountForTransaction.AccountNumber)
-                        {
-                            this.LoadedAccountList[i].Ammount = this.LoadedAccountList[i].Ammount + transactionSum;
-                            Console.WriteLine("this.selectedKeyForMinus: " + this.LoadedAccountList[i].Ammount);
-                            continue;
-                        }
-                    }
+                    this.selectedAccountForMinus.Deposit(transactionSum * -1);
+                    this.selectedAccountForPlus.Deposit(transactionSum);
+
+                    //for (int i = 0; i < this.LoadedAccountList.Count; i++)
+                    //{
+                    //    if (this.LoadedAccountList[i].AccountNumber == this.selectedAccountForMinus.AccountNumber)
+                    //    {
+                    //        this.LoadedAccountList[i].Ammount = this.LoadedAccountList[i].Ammount - transactionSum;
+                    //        Console.WriteLine("this.selectedKeyForMinus: " + this.LoadedAccountList[i].Ammount);
+                    //        continue;
+                    //    }
+                    //    if (this.LoadedAccountList[i].AccountNumber == this.selectedAccountForTransaction.AccountNumber)
+                    //    {
+                    //        this.LoadedAccountList[i].Ammount = this.LoadedAccountList[i].Ammount + transactionSum;
+                    //        Console.WriteLine("this.selectedKeyForMinus: " + this.LoadedAccountList[i].Ammount);
+                    //        continue;
+                    //    }
+                    //}
 
                     Close();
                 }
@@ -91,12 +96,25 @@ namespace Lesson12Task
 
         private void FillSecondAccountListForTransaction()
         {
-            foreach (AccountNonDeposit account in this.LoadedAccountList)
+            foreach (Account<decimal, decimal> account in this.FirstAccountList)
             {
                 if (account.AccountNumber != selectedAccountForMinus.AccountNumber)
                 {
                     this.SecondAccountList.Add(account);
                 }
+            }
+        }
+
+        private void FillAccountList()
+        {
+            this.FirstAccountList = new ObservableCollection<Account<decimal, decimal>>();
+            if (this.LoadedClient.DepositAccount != null)
+            {
+                this.FirstAccountList.Add(this.LoadedClient.DepositAccount);
+            }
+            if (this.LoadedClient.NonDepositAccount != null)
+            {
+                this.FirstAccountList.Add(this.LoadedClient.NonDepositAccount);
             }
         }
     }

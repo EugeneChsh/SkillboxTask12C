@@ -11,7 +11,7 @@ namespace Lesson12Task
     public class AccountRepository
     {
         public Client LoadedClient { get; private set; }
-        public ObservableCollection<AccountNonDeposit> AccountList { get; private set; }
+        public ObservableCollection<Account<decimal, decimal>> AccountList { get; private set; }
         private Repository repository;
 
         public AccountRepository() { }
@@ -19,7 +19,7 @@ namespace Lesson12Task
         public AccountRepository(ObservableCollection<Client> _clientList, int _clientIndex, Repository _repository) 
         {
             this.LoadedClient = _clientList[_clientIndex];
-            this.AccountList = this.LoadedClient.AccountList;
+            FillAccountList();
             this.repository = _repository;
         }
 
@@ -27,23 +27,36 @@ namespace Lesson12Task
         {
             AddAccountWindow addAccountWindow = new AddAccountWindow(this.LoadedClient);
             addAccountWindow.ShowDialog();
-            AccountNonDeposit newAccount = addAccountWindow.Account;
+            this.AccountList.Add(addAccountWindow.Account);
 
-            this.LoadedClient.AccountList.Add(newAccount);
             this.repository.LoadClientsIntoFile();
         }
 
         public void RemoveAccount(int selectedIndex)
         {
-            this.LoadedClient.AccountList.RemoveAt(selectedIndex);
+            this.LoadedClient.RemoveAccount(this.AccountList[selectedIndex]);
+            this.AccountList.Remove(this.AccountList[selectedIndex]);
             this.repository.LoadClientsIntoFile();
         }
 
         public void StartTransaction()
         {
-            TransactionWindow transactionWindow = new TransactionWindow(this.AccountList);
+            TransactionWindow transactionWindow = new TransactionWindow(this.LoadedClient);
             transactionWindow.ShowDialog();
             this.repository.LoadClientsIntoFile();
+        }
+
+        private void FillAccountList()
+        {
+            this.AccountList = new ObservableCollection<Account<decimal, decimal>>();
+            if (this.LoadedClient.DepositAccount != null)
+            {
+                this.AccountList.Add(this.LoadedClient.DepositAccount);
+            }
+            if (this.LoadedClient.NonDepositAccount != null)
+            {
+                this.AccountList.Add(this.LoadedClient.NonDepositAccount);
+            }
         }
     }
 }

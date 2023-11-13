@@ -23,9 +23,8 @@
         <DataGrid HorizontalAlignment="Left" Height="445" Margin="220,90,0,0" AutoGenerateColumns="False" IsReadOnly="True"
                   VerticalAlignment="Top" Width="580" ItemsSource="{Binding ClientList}" x:Name="DataGridClients">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ФИО" Binding="{Binding FIO}" Width="280"/>
-                <DataGridTextColumn Header="Номер Паспорта" Binding="{Binding Passport}" Width="150"/>
-                <DataGridTextColumn Header="Количество счетов" Binding="{Binding AccountList.Count}" Width="150"/>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding FIO}" Width="400"/>
+                <DataGridTextColumn Header="Номер Паспорта" Binding="{Binding Passport}" Width="180"/>
             </DataGrid.Columns>
         </DataGrid>
 

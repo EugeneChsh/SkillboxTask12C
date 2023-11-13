@@ -15,7 +15,8 @@ namespace Lesson12Task
         private int id;
         public string FIO { get; set; }
         public string Passport { get; set; }
-        public ObservableCollection<AccountNonDeposit> AccountList { get; set; }
+        public DepositAccount<decimal, decimal> DepositAccount { get; set; }
+        public NonDepositAccount<decimal, decimal> NonDepositAccount { get; set; }
 
         public Client(string _FIO, string _passport)
         {
@@ -23,22 +24,34 @@ namespace Lesson12Task
             nextId++;
             FIO = _FIO;
             Passport = _passport;
-            AccountList = new ObservableCollection<AccountNonDeposit>();
         }
 
         [JsonConstructor]
-        public Client(int Id, string _FIO, string _passport, ObservableCollection<AccountNonDeposit> _accountList)
+        public Client(int Id, string _FIO, string _passport, DepositAccount<decimal, decimal> _depositAccount,
+            NonDepositAccount<decimal, decimal> _nonDepositAccount)
         {
             this.id = Id;
             nextId = Id + 1;
             FIO = _FIO;
             Passport = _passport;
-            AccountList = _accountList;
+            DepositAccount = _depositAccount;
+            NonDepositAccount = _nonDepositAccount;
         }
 
         public int Id { 
             get {
                 return this.id;
+            }
+        }
+
+        public void RemoveAccount(IAccount<decimal, decimal> onRemove)
+        {
+            if (onRemove.IsDepositAccount) {
+                this.DepositAccount = null;
+            } 
+            else
+            {
+                this.NonDepositAccount = null;
             }
         }
     }
