@@ -22,18 +22,39 @@ namespace Lesson12Task
     public partial class TransactionWindow : Window
     {
         private Client LoadedClient;
+
+        ObservableCollection<Client> ClientList;
         public ObservableCollection<Account<decimal, decimal>> FirstAccountList { get; set; }
         public ObservableCollection<Account<decimal, decimal>> SecondAccountList { get; set; }
 
         private Account<decimal, decimal> selectedAccountForMinus;
         private Account<decimal, decimal> selectedAccountForPlus;
 
+        /// <summary>
+        /// Для транзакций между своими счетами
+        /// </summary>
+        /// <param name="_LoadedClient"></param>
         public TransactionWindow(Client _LoadedClient)
         {
             InitializeComponent();
             this.SecondAccountList = new ObservableCollection<Account<decimal, decimal>>();
             this.LoadedClient = _LoadedClient;
             FillAccountList();
+            DataContext = this;
+        }
+
+        /// <summary>
+        /// Для транзакций между клиентами
+        /// </summary>
+        /// <param name="_LoadedClient"></param>
+        /// <param name="_clientList"></param>
+        public TransactionWindow(Client _LoadedClient, ObservableCollection<Client> _clientList)
+        {
+            InitializeComponent();
+            this.SecondAccountList = new ObservableCollection<Account<decimal, decimal>>();
+            this.ClientList = _clientList;
+            this.LoadedClient = _LoadedClient;
+            FillAccountListOther();
             DataContext = this;
         }
 
@@ -69,22 +90,6 @@ namespace Lesson12Task
                     this.selectedAccountForMinus.Deposit(transactionSum * -1);
                     this.selectedAccountForPlus.Deposit(transactionSum);
 
-                    //for (int i = 0; i < this.LoadedAccountList.Count; i++)
-                    //{
-                    //    if (this.LoadedAccountList[i].AccountNumber == this.selectedAccountForMinus.AccountNumber)
-                    //    {
-                    //        this.LoadedAccountList[i].Ammount = this.LoadedAccountList[i].Ammount - transactionSum;
-                    //        Console.WriteLine("this.selectedKeyForMinus: " + this.LoadedAccountList[i].Ammount);
-                    //        continue;
-                    //    }
-                    //    if (this.LoadedAccountList[i].AccountNumber == this.selectedAccountForTransaction.AccountNumber)
-                    //    {
-                    //        this.LoadedAccountList[i].Ammount = this.LoadedAccountList[i].Ammount + transactionSum;
-                    //        Console.WriteLine("this.selectedKeyForMinus: " + this.LoadedAccountList[i].Ammount);
-                    //        continue;
-                    //    }
-                    //}
-
                     Close();
                 }
             }
@@ -115,6 +120,23 @@ namespace Lesson12Task
             if (this.LoadedClient.NonDepositAccount != null)
             {
                 this.FirstAccountList.Add(this.LoadedClient.NonDepositAccount);
+            }
+        }
+
+        private void FillAccountListOther()
+        {
+            this.FirstAccountList = new ObservableCollection<Account<decimal, decimal>>();
+            if (this.LoadedClient.NonDepositAccount != null)
+            {
+                this.FirstAccountList.Add(this.LoadedClient.NonDepositAccount);
+            }
+
+            foreach (Client client in this.ClientList)
+            {
+                if (client.NonDepositAccount != null && this.FirstAccountList[0].AccountNumber != client.NonDepositAccount.AccountNumber)
+                {
+                    this.SecondAccountList.Add(client.NonDepositAccount);
+                }
             }
         }
     }

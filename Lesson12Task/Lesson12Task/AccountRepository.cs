@@ -11,6 +11,7 @@ namespace Lesson12Task
     public class AccountRepository
     {
         public Client LoadedClient { get; private set; }
+        public ObservableCollection<Client> ClientList { get; private set; }
         public ObservableCollection<Account<decimal, decimal>> AccountList { get; private set; }
         private Repository repository;
 
@@ -18,6 +19,7 @@ namespace Lesson12Task
 
         public AccountRepository(ObservableCollection<Client> _clientList, int _clientIndex, Repository _repository) 
         {
+            this.ClientList = _clientList;
             this.LoadedClient = _clientList[_clientIndex];
             FillAccountList();
             this.repository = _repository;
@@ -39,9 +41,16 @@ namespace Lesson12Task
             this.repository.LoadClientsIntoFile();
         }
 
-        public void StartTransaction()
+        public void StartTransactionMain()
         {
             TransactionWindow transactionWindow = new TransactionWindow(this.LoadedClient);
+            transactionWindow.ShowDialog();
+            this.repository.LoadClientsIntoFile();
+        }
+
+        public void StartTransactionOther()
+        {
+            TransactionWindow transactionWindow = new TransactionWindow(this.LoadedClient, this.ClientList);
             transactionWindow.ShowDialog();
             this.repository.LoadClientsIntoFile();
         }

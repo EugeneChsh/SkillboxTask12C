@@ -20,11 +20,13 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Добавить счет" HorizontalAlignment="Left" Height="35" Margin="10,370,0,0" VerticalAlignment="Top" 
-                Width="140" Click="Button_AddAccount" />
-        <Button Content="Удалить счет" HorizontalAlignment="Left" Height="35" Margin="160,370,0,0" VerticalAlignment="Top" 
-                Width="140" Click="Button_RemoveAccount"/>
-        <Button Content="Перевод на другой счет" HorizontalAlignment="Left" Height="35" Margin="310,370,0,0" VerticalAlignment="Top" 
-                Width="140" Click="Button_Starttransaction"/>
+                Width="100" Click="Button_AddAccount" />
+        <Button Content="Удалить счет" HorizontalAlignment="Left" Height="35" Margin="120,370,0,0" VerticalAlignment="Top" 
+                Width="100" Click="Button_RemoveAccount"/>
+        <Button Content="Перевод между своими счетами" HorizontalAlignment="Left" Height="35" Margin="230,370,0,0" VerticalAlignment="Top" 
+                Width="190" Click="Button_StartTransactionMain"/>
+        <Button Content="Перевод на другой счет" HorizontalAlignment="Left" Height="35" Margin="430,370,0,0" VerticalAlignment="Top" 
+                Width="190" Click="Button_StartTransactionOther"/>
         <Button Content="Вернуться" HorizontalAlignment="Left" Height="35" Margin="670,370,0,0" VerticalAlignment="Top" 
                 Width="100" Click="Button_Return" />
 

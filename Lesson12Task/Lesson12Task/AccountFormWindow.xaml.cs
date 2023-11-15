@@ -42,9 +42,15 @@ namespace Lesson12Task
             this.accountRepository.RemoveAccount(selectedIndex);
         }
 
-        private void Button_Starttransaction(object sender, RoutedEventArgs e)
+        private void Button_StartTransactionMain(object sender, RoutedEventArgs e)
         {
-            this.accountRepository.StartTransaction();
+            this.accountRepository.StartTransactionMain();
+            DataGridAccounts.Items.Refresh();
+        }
+
+        private void Button_StartTransactionOther(object sender, RoutedEventArgs e)
+        {
+            this.accountRepository.StartTransactionOther();
             DataGridAccounts.Items.Refresh();
         }
 
